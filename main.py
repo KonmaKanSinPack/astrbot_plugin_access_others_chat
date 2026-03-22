@@ -60,20 +60,21 @@ class MyPlugin(Star):
         history = json.loads(conversation.history) if conversation and conversation.history else []
         result = []
         for msg in history:
-            if msg.get("role") in ["user", "assistant"]:
-                content_result = []
-                # logger.info(f"测试1：{msg.get('content', [])}")
-                # logger.info(f"测试2：{msg.get('content')[0]}")
-                for content in msg.get("content") or []:
-                    if isinstance(content, dict):
-                        # logger.info(f"测试3：{content}")
-                        if content.get("type", "") == "text":
-                            content_result.append(content.get("text", ""))
+            if msg.get("role") not in ["user", "assistant"]:
+                continue  # 尽早跳过不需要的 role，减少嵌套
+            
+            # 用列表推导式，一行搞定过滤 image 和提取 text
+            # 遍历 content，只要它是字典且 type 是 text，就把它的 text 值拿出来放到列表里。
+            text_parts = [
+                item.get("text", "") 
+                for item in (msg.get("content") or []) 
+                if isinstance(item, dict) and item.get("type") == "text"
+            ]
 
-                result.append({
-                    "role": msg.get("role"),
-                    "content": content_result if content_result else ""
-                })
+            result.append({
+                "role": msg.get("role"),
+                "content": " ".join(text_parts) if text_parts else ""
+            })
 
         recent_history = result[-length:]
         return recent_history
