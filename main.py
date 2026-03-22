@@ -8,6 +8,7 @@ from astrbot.api import logger
 class MyPlugin(Star):
     def __init__(self, context: Context):
         super().__init__(context)
+        self.context = context
 
     async def initialize(self):
         """可选择实现异步的插件初始化方法，当实例化该插件类之后会自动调用该方法。"""
@@ -30,7 +31,10 @@ class MyPlugin(Star):
         if not isinstance(GroupOrFriend, bool):
             return "参数 GroupOrFriend 必须是布尔值，True 表示群记忆，False 表示好友记忆。"
         type_name = "default:GroupMessage:" if GroupOrFriend else "default:FriendMessage:"
+        
         uid = type_name + subject_id
+        logger.info(f"查看当前uid：{uid}")
+        logger.info(f"查看当前会话id：{subject_id}")
         # provider_id = await self.context.get_current_chat_provider_id(uid)
         # logger.info(f"uid:{uid}")
 
