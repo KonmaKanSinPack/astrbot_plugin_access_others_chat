@@ -24,7 +24,7 @@ class MyPlugin(Star):
     async def access_others_chat_history(
         self,
         event: AstrMessageEvent,
-        GroupOrFriend: bool,
+        isGroup: bool,
         subject_id: str,
         length: Optional[int] = 20
     ) -> MessageEventResult:
@@ -35,14 +35,14 @@ class MyPlugin(Star):
          
 
         Args:
-            GroupOrFriend (bool): True 表示更新群记忆，False 表示更新好友记忆。
+            isGroup (bool): True 表示更新群记忆，False 表示更新好友记忆。
             subject_id (str): 群id或好友id.
             length (int, optional): (可选）需要访问的聊天记录条数，默认为20条。注意，不易过长，否则会报错
         '''
         
-        if not isinstance(GroupOrFriend, bool):
-            return "参数 GroupOrFriend 必须是布尔值，True 表示群记忆，False 表示好友记忆。"
-        type_name = "default:GroupMessage:" if GroupOrFriend else "default:FriendMessage:"
+        if not isinstance(isGroup, bool):
+            return "参数 isGroup 必须是布尔值，True 表示群记忆，False 表示好友记忆。"
+        type_name = "default:GroupMessage:" if isGroup else "default:FriendMessage:"
         
         uid = type_name + subject_id
         logger.info(f"查看当前uid：{uid}")
