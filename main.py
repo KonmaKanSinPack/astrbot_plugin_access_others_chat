@@ -10,7 +10,7 @@ import json_repair
 
 from astrbot.api import AstrBotConfig
 
-@register("access_others_chat_history", "兔子", "一个简单的 Hello World 插件", "1.0.0")
+@register("access_others_chat_history", "兔子", "为bot提供访问其他聊天会话的工具，让bot在和你聊天的时候也能知道在其他地方聊了什么", "1.0.0")
 class MyPlugin(Star):
     def __init__(self, context: Context):
         super().__init__(context)
@@ -61,9 +61,14 @@ class MyPlugin(Star):
         result = []
         for msg in history:
             if msg.get("role") in ["user", "assistant"]:
+                content_result = []
+                for content in msg.get("content", []):
+                    if content.get("type") == "text":
+                        content_result.append(content.get("text", ""))
+
                 result.append({
                     "role": msg.get("role"),
-                    "content": msg.get("content")
+                    "content": content_result if content_result else ""
                 })
 
         recent_history = result[-length:]
