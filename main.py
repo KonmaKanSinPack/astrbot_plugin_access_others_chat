@@ -64,7 +64,7 @@ class MyPlugin(Star):
                 content_result = []
                 logger.info(f"测试1：{msg.get('content', [])}")
                 # logger.info(f"测试2：{msg.get('content')[0]}")
-                for content in msg.get("content", []):
+                for content in msg.get("content") or []:
                     if isinstance(content, dict):
                         logger.info(f"测试3：{content}")
                         if content.get("type", "") == "text":
