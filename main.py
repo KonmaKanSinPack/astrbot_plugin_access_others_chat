@@ -29,22 +29,33 @@ class MyPlugin(Star):
         length: Optional[int] = 20
     ) -> MessageEventResult:
 
-        '''访问他人聊天记录工具，
-        大模型可以调用这个工具来访问与其他id的聊天记录，调用时请按顺序确保提供正确的参数。
-        当大模型需要增加或更新全局记忆时，可以辅助这个函数来更新记忆。
-        或者当大模型需要访问与其他id的聊天记录时，可以调用这个函数来获取聊天记录，从而辅助大模型做出更好的回复。
+        '''访问他人聊天记录工具。
+        大模型可以用它来查看其他会话的上下文，实现全局记忆感知。
+
+        适用场景：
+          用户问"刚才微信上那个人说了什么"或"群里那件事你记得吗"时，主动调用此工具获取记录。
 
         Args:
-            isGroup (bool): True 表示更新群记忆，False 表示更新好友记忆。
-            subject_id (str): 群id或好友id.
-            length (int, optional): (可选）需要访问的聊天记录条数，默认为20条。
+            isGroup (bool): True=群聊, False=私聊。
+            subject_id (str): 推荐传入完整 unified_msg_origin 格式，即 "{platform_id}:FriendMessage:{user_id}"。
+                - 微信平台: "weixin_qty:FriendMessage:o9cq808..."（私聊）
+                - 微信平台: "weixin_qty:GroupMessage:xxxxx"（群聊）
+                - WebChat:   "webchat:FriendMessage:qty!uuid..."
+                - 也可只传纯 user_id（如 "o9cq8..."），但仅当平台为 default 时才能查到。
+                - isGroup=True 时，请将消息类型对应改为 GroupMessage。
+            length (int, optional): 返回的最近消息条数，默认20，最大100。
         '''
         length = max(1, min(length, 100))  # 确保 length 在 1 到 100 之间
         if not isinstance(isGroup, bool):
             return "参数 isGroup 必须是布尔值，True 表示群记忆，False 表示好友记忆。"
-        type_name = "default:GroupMessage:" if isGroup else "default:FriendMessage:"
         
-        uid = type_name + subject_id
+        # 如果 subject_id 已包含 ":"，视为完整 unified_msg_origin 直接使用
+        # 否则按旧逻辑补上默认前缀
+        if ":" in subject_id:
+            uid = subject_id
+        else:
+            type_name = "default:GroupMessage:" if isGroup else "default:FriendMessage:"
+            uid = type_name + subject_id
         # provider_id = await self.context.get_current_chat_provider_id(uid)
         # logger.info(f"uid:{uid}")
 
