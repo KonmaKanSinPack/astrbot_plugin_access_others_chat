@@ -7,7 +7,7 @@ from astrbot.api.event import AstrMessageEvent, filter
 from astrbot.api.star import Context, Star, register
 from typing import Optional
 
-@register("access_others_chat_history", "兔子", "为bot提供访问其他聊天会话的工具，让bot在和你聊天的时候也能知道在其他地方聊了什么", "1.0.1")
+@register("astrbot_plugin_access_others_chat", "兔子", "为bot提供访问其他聊天会话的工具，让bot在和你聊天的时候也能知道在其他地方聊了什么", "1.0.2")
 class MyPlugin(Star):
     def __init__(self, context: Context):
         super().__init__(context)
