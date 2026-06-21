@@ -45,10 +45,12 @@ class MyPlugin(Star):
         # 如果 subject_id 已包含 ":"，视为完整 unified_msg_origin 直接使用
         # 否则从当前事件的 unified_msg_origin 提取适配器实例名（如 "zbc"），自动补全前缀
         logger.info(f"查看一下:{event.unified_msg_origin}")
+        
         if ":" in subject_id:
             uid = subject_id
         else:
             adapter_name = event.unified_msg_origin.split(":")[0] if event.unified_msg_origin else "default"
+            logger.info(f"当前adapter name为：{adapter_name}")
             type_name = f"{adapter_name}:GroupMessage:" if isGroup else f"{adapter_name}:FriendMessage:"
             uid = type_name + subject_id
         # provider_id = await self.context.get_current_chat_provider_id(uid)
