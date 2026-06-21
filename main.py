@@ -34,11 +34,7 @@ class MyPlugin(Star):
 
         Args:
             isGroup (bool): True=群聊, False=私聊。
-            subject_id (str): 推荐传入完整 unified_msg_origin 格式，即 "{platform_id}:FriendMessage:{user_id}"。
-                - 微信平台: "weixin_qty:FriendMessage:o9cq808..."（私聊）
-                - 微信平台: "weixin_qty:GroupMessage:xxxxx"（群聊）
-                - WebChat:   "webchat:FriendMessage:qty!uuid..."
-                - 也可只传纯 user_id（如 "o9cq8..."），插件会自动补全当前平台前缀。
+            subject_id (str): 只传纯 user_id（如 "o9cq8..."），插件会自动补全当前平台前缀。
                 - isGroup=True 时，请将消息类型对应改为 GroupMessage。
             length (int, optional): 返回的最近消息条数，默认20，最大100。
         '''
@@ -48,6 +44,7 @@ class MyPlugin(Star):
         
         # 如果 subject_id 已包含 ":"，视为完整 unified_msg_origin 直接使用
         # 否则从当前事件的 unified_msg_origin 提取适配器实例名（如 "zbc"），自动补全前缀
+        logger.info(f"查看一下:{event.unified_msg_origin}")
         if ":" in subject_id:
             uid = subject_id
         else:
