@@ -47,16 +47,12 @@ class MyPlugin(Star):
             return "参数 isGroup 必须是布尔值，True 表示群记忆，False 表示好友记忆。"
         
         # 如果 subject_id 已包含 ":"，视为完整 unified_msg_origin 直接使用
-        # 否则从当前事件获取平台适配器名称，自动补全前缀
+        # 否则从当前事件的 unified_msg_origin 提取适配器实例名（如 "zbc"），自动补全前缀
         if ":" in subject_id:
             uid = subject_id
         else:
-            platform = (
-                str(event.get_platform_id() or "").strip()
-                or str(event.get_platform_name() or "").strip()
-                or "default"
-            )
-            type_name = f"{platform}:GroupMessage:" if isGroup else f"{platform}:FriendMessage:"
+            adapter_name = event.unified_msg_origin.split(":")[0] if event.unified_msg_origin else "default"
+            type_name = f"{adapter_name}:GroupMessage:" if isGroup else f"{adapter_name}:FriendMessage:"
             uid = type_name + subject_id
         # provider_id = await self.context.get_current_chat_provider_id(uid)
         # logger.info(f"uid:{uid}")
