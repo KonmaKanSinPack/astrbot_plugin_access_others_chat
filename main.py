@@ -38,7 +38,7 @@ class MyPlugin(Star):
                 - 微信平台: "weixin_qty:FriendMessage:o9cq808..."（私聊）
                 - 微信平台: "weixin_qty:GroupMessage:xxxxx"（群聊）
                 - WebChat:   "webchat:FriendMessage:qty!uuid..."
-                - 也可只传纯 user_id（如 "o9cq8..."），但仅当平台为 default 时才能查到。
+                - 也可只传纯 user_id（如 "o9cq8..."），插件会自动补全当前平台前缀。
                 - isGroup=True 时，请将消息类型对应改为 GroupMessage。
             length (int, optional): 返回的最近消息条数，默认20，最大100。
         '''
@@ -47,11 +47,16 @@ class MyPlugin(Star):
             return "参数 isGroup 必须是布尔值，True 表示群记忆，False 表示好友记忆。"
         
         # 如果 subject_id 已包含 ":"，视为完整 unified_msg_origin 直接使用
-        # 否则按旧逻辑补上默认前缀
+        # 否则从当前事件获取平台适配器名称，自动补全前缀
         if ":" in subject_id:
             uid = subject_id
         else:
-            type_name = "default:GroupMessage:" if isGroup else "default:FriendMessage:"
+            platform = (
+                str(event.get_platform_id() or "").strip()
+                or str(event.get_platform_name() or "").strip()
+                or "default"
+            )
+            type_name = f"{platform}:GroupMessage:" if isGroup else f"{platform}:FriendMessage:"
             uid = type_name + subject_id
         # provider_id = await self.context.get_current_chat_provider_id(uid)
         # logger.info(f"uid:{uid}")
