@@ -103,6 +103,7 @@ astrbot_plugin_access_others_chat_history/
 ├── tests/
 │   └── test_inject.py # 独立单元/冒烟测试（无需 AstrBot 环境）
 ├── README.md          # 本文件
+├── CHANGELOG.md       # 更新日志
 ├── metadata.yaml      # 插件元信息
 └── LICENSE            # AGPL-3.0 license
 ```

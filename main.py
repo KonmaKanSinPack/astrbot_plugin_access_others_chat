@@ -20,7 +20,7 @@ except ModuleNotFoundError:
     "astrbot_plugin_access_others_chat",
     "兔子",
     "为bot提供访问其他聊天会话的工具，并让bot在群聊时自动感知私聊内容",
-    "v1.1.0",
+    "v1.1.1",
 )
 class MyPlugin(Star):
     def __init__(self, context: Context, config=None):
