@@ -6,7 +6,14 @@ from astrbot.api.event import filter, AstrMessageEvent, MessageEventResult
 from astrbot.api.provider import ProviderRequest
 from astrbot.api.star import Context, Star, register
 
-from history_utils import build_friend_umo, extract_text_history, render_context_block
+# 兄弟模块导入（CHG-2）：AstrBot 以 data.plugins.<插件名>.main 的包式方式加载插件
+# （v3.5.4/v4 均为 __import__("data.plugins.<name>.main")），插件目录不在 sys.path 上，
+# 绝对导入会失败；本地/测试环境（插件目录在 sys.path）则相对导入失败。
+# 因此两者都试：先绝对（测试环境），失败再相对（部署环境）。
+try:
+    from history_utils import build_friend_umo, extract_text_history, render_context_block
+except ModuleNotFoundError:
+    from .history_utils import build_friend_umo, extract_text_history, render_context_block
 
 
 @register(
