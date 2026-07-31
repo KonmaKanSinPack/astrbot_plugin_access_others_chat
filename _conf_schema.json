@@ -1,0 +1,22 @@
+{
+  "inject_enabled": {
+    "description": "群聊自动注入私聊上下文总开关",
+    "type": "bool",
+    "default": true
+  },
+  "inject_user_whitelist": {
+    "description": "只对列表中的 user_id 生效；留空 = 所有用户生效",
+    "type": "list",
+    "default": []
+  },
+  "inject_max_messages": {
+    "description": "每次注入的私聊最近消息条数（1~50）",
+    "type": "int",
+    "default": 10
+  },
+  "inject_max_chars": {
+    "description": "注入文本总字符数上限",
+    "type": "int",
+    "default": 2000
+  }
+}
