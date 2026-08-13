@@ -2,7 +2,7 @@
   "inject_enabled": {
     "description": "群聊自动注入私聊上下文总开关",
     "type": "bool",
-    "default": true
+    "default": false
   },
   "inject_user_whitelist": {
     "description": "只对列表中的 user_id 生效；留空 = 所有用户生效",
@@ -18,5 +18,20 @@
     "description": "注入文本总字符数上限",
     "type": "int",
     "default": 2000
+  },
+  "tool_enabled": {
+    "description": "允许模型按需读取其他会话历史（高敏感，默认关闭）",
+    "type": "bool",
+    "default": false
+  },
+  "tool_admin_only": {
+    "description": "仅允许管理员调用跨会话历史工具",
+    "type": "bool",
+    "default": true
+  },
+  "tool_user_whitelist": {
+    "description": "工具调用者 user_id 白名单；留空不额外限制（仍受管理员开关约束）",
+    "type": "list",
+    "default": []
   }
 }
